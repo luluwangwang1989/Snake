@@ -2,7 +2,6 @@ JavaScript Snake<br/>
 By Patrick Gillespie<br/>
 License: MIT<br/>
 http://patorjk.com/games/snake
-CI/CD
 This is a DOM-based game of Snake that I wrote in JavaScript a few years back.
 
 Other than the full screen mode demonstrated in the code, it can also be 
