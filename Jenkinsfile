@@ -1,4 +1,4 @@
-podTemplate(label: 'jnlp', namesapce: 'default', cloud: 'kubernetes',
+podTemplate(name: 'jnlp', label: 'jnlp', namesapce: 'default', cloud: 'kubernetes',
   containers: [
         containerTemplate(
             name: 'jnlp',
