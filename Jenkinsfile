@@ -1,34 +1,55 @@
-pipeline {
-  agent any
-  stages {
-    stage('snake job') {
-      steps {
-        build 'snake'
-      }
-    }
-    stage('test') {
-      steps {
-        parallel(
-          "test1": {
-            sh 'echo "run test"'
-            
-          },
-          "test2": {
-            sh 'echo "run test2"'
-            
-          }
+podTemplate(label: 'jnlp', namesapce: 'default', cloud: 'kubernetes',
+  containers: [
+        containerTemplate(
+            name: 'jnlp',
+            image: 'hub.easystack.io/captain/slave-base:2.62',
+            command: '',
+            args: '${computer.jnlpmac} ${computer.name}',
+            privileged: true,
+            alwaysPullImage: false,
+            ttyEnabled: true, 
+        ),
+        containerTemplate(
+            name: 'slave-base',
+            image: 'hub.easystack.io/captain/slave-base:2.62',
+            command: '',
+            args: '${computer.jnlpmac} ${computer.name}',
+            privileged: true,
+            alwaysPullImage: false,
+            ttyEnabled: true, 
         )
-      }
+  ],
+  volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
+            hostPathVolume(hostPath: '/usr/bin/docker', mountPath: '/usr/bin/docker'),
+            hostPathVolume(hostPath: '/usr/bin/docker-current', mountPath: '/usr/bin/docker-current'),
+            hostPathVolume(hostPath: '/etc/sysconfig/docker', mountPath: '/etc/sysconfig/docker'),
+            hostPathVolume(hostPath: '/usr/bin/kubectl', mountPath: '/usr/bin/kubectl')]
+  ) {
+
+  node('jnlp') {
+    stage('devops for snake game') {
+        container('slave-base') {
+            stage("clone") {
+                git 'https://github.com/riverzhang/Snake.git'
+            }
+            
+            stage('unit test') {
+                sh 'echo "unit test command"'
+            }
+            
+            stage('build docker image') {
+                sh """
+                    docker login -u admin -p Passw0rd hub.easystack.io
+                    docker build -t hub.easystack.io/captain/snake:${BUILD_NUMBER} .
+                    docker push hub.easystack.io/captain/snake:${BUILD_NUMBER}
+                """
+            }
+            
+            stage('deploy') {
+                
+                sh """kubectl set image deployment/snake snake=hub.easystack.io/captain/snake:${BUILD_NUMBER}"""
+            }
+        }
     }
-    stage('build') {
-      steps {
-        sh 'echo "build docker image"'
-      }
-    }
-    stage('depioy') {
-      steps {
-        sh 'echo "deploy project"'
-      }
-    }
-  }
+ }
 }
