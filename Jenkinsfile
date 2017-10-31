@@ -9,15 +9,6 @@ podTemplate(label: 'jnlp', namesapce: 'default', cloud: 'kubernetes',
             alwaysPullImage: false,
             ttyEnabled: true, 
         ),
-        containerTemplate(
-            name: 'slave-base',
-            image: 'hub.easystack.io/captain/slave-base:2.62',
-            command: '',
-            args: '${computer.jnlpmac} ${computer.name}',
-            privileged: true,
-            alwaysPullImage: false,
-            ttyEnabled: true, 
-        )
   ],
   volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
             hostPathVolume(hostPath: '/usr/bin/docker', mountPath: '/usr/bin/docker'),
@@ -28,7 +19,7 @@ podTemplate(label: 'jnlp', namesapce: 'default', cloud: 'kubernetes',
 
   node('jnlp') {
     stage('devops for snake game') {
-        container('slave-base') {
+        container('jnlp') {
             stage("clone") {
                 git 'https://github.com/riverzhang/Snake.git'
             }
