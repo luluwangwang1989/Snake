@@ -36,7 +36,7 @@ podTemplate(name: 'jnlp', label: 'jnlp', namesapce: 'default', cloud: 'kubernete
                 """
             }
             
-            stage('deploy') {
+            stage('deploy to k8s') {
                 
                 sh """kubectl set image deployment/snake snake=hub.easystack.io/captain/snake:${BUILD_NUMBER}"""
             }
