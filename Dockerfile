@@ -1,4 +1,4 @@
-FROM nginx:latest
+FROM hub.easystack.io/library/nginx:v1
 
 COPY . /usr/share/nginx/html
 
