@@ -2,7 +2,7 @@ podTemplate(name: 'jnlp', label: 'jnlp', namesapce: 'default', cloud: 'kubernete
   containers: [
         containerTemplate(
             name: 'jnlp',
-            image: 'hub.easystack.io/captain/slave-base:2.62',
+            image: 'hub.easystack.io/3dc70621b8504c98/jenkins-slave:v1',
             command: '',
             args: '${computer.jnlpmac} ${computer.name}',
             privileged: true,
@@ -30,9 +30,9 @@ podTemplate(name: 'jnlp', label: 'jnlp', namesapce: 'default', cloud: 'kubernete
             
             stage('build docker image') {
                 sh """
-                    docker login -u admin -p Passw0rd hub.easystack.io
-                    docker build -t hub.easystack.io/captain/snake:${BUILD_NUMBER} .
-                    docker push hub.easystack.io/captain/snake:${BUILD_NUMBER}
+                    docker login -u 3dc70621b8504c98 -p Tcdf4f05247d79dd7 hub.easystack.io
+                    docker build -t hub.easystack.io/3dc70621b8504c98/snake:${BUILD_NUMBER} .
+                    docker push hub.easystack.io/3dc70621b8504c98/snake:${BUILD_NUMBER}
                 """
             }
             
