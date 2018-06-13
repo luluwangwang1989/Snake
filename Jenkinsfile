@@ -21,7 +21,7 @@ podTemplate(name: 'jnlp', label: 'jnlp', namesapce: 'default', cloud: 'kubernete
     stage('devops for snake game') {
         container('jnlp') {
             stage("clone snake code") {
-                git 'https://github.com/riverzhang/Snake.git'
+                git 'https://github.com/luluwangwang1989/Snake.git'
             }
             
             stage('unit test') {
